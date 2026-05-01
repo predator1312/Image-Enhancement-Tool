@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Enhancement App</title>
+    <style>
+        body {
+            font-family: Inter, Roboto, Arial, sans-serif; /* Modern font stack */
+            line-height: 1.6;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5; /* Original light gray */
+            overflow-x: hidden;
+            color: #1f2937;
+            min-height: 100vh; /* Ensure footer stays at bottom */
+            display: flex;
+            flex-direction: column;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50; /* Original dark blue */
+            margin-bottom: 30px;
+            font-size: 2.25rem;
+            font-weight: 700;
+        }
+        .image-box {
+            flex: 1;
+            background-color: #eff6ff; /* Faint blue tint */
+            border-radius: 12px; /* Softer corners */
+            padding: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Deeper shadow */
+            margin-bottom: 20px;
+            min-width: 0;
+            transition: transform 0.2s ease;
+        }
+        .image-box:hover {
+            transform: scale(1.03); /* Subtle hover effect */
+        }
+        .upload-container {
+            background-color: #eff6ff; /* Faint blue tint */
+            border-radius: 12px; /* Softer corners */
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Deeper shadow */
+            margin-bottom: 20px;
+        }
+        .info-container {
+            background-color: #eff6ff; /* Faint blue tint */
+            border-radius: 12px; /* Softer corners */
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* Deeper shadow */
+            margin-bottom: 20px;
+        }
+        .info-container h2 {
+            color: #2c3e50;
+            margin-top: 0;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .info-boxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+        .info-box {
+            flex: 1;
+            min-width: 250px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease;
+        }
+        .info-box:hover {
+            transform: translateY(-5px);
+        }
+        .info-box h3 {
+            color: #3498db;
+            margin-top: 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: center;
+        }
+        .info-container ul {
+            padding-left: 20px;
+        }
+        .info-container li {
+            margin-bottom: 8px;
+        }
+        .options-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .option-group {
+            flex: 1;
+            margin-right: 20px;
+        }
+        .option-group:last-child {
+            margin-right: 0;
+        }
+        label {
+            margin-right: 10px;
+            font-weight: bold;
+            color: #2c3e50; /* Dark blue */
+        }
+        select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd; /* Original border */
+            background-color: #fff;
+            color: #2c3e50;
+        }
+        button {
+            background-color: #3498db; /* Original blue */
+            color: white;
+            border: 1px solid #2563eb; /* Thin blue border */
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #2980b9; /* Original hover */
+            transform: scale(1.03); /* Subtle hover scale */
+        }
+        button:disabled {
+            background-color: #95a5a6; /* Original disabled */
+            border-color: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .download-btn {
+            background-color: #3498db; /* Match main button */
+            border: 1px solid #2563eb; /* Thin blue border */
+        }
+        .download-btn:hover {
+            background-color: #219653; /* Original green hover */
+            transform: scale(1.03);
+        }
+        .image-box h3 {
+            text-align: center;
+            margin-top: 0;
+            color: #2c3e50; /* Original dark blue */
+            font-weight: 600;
+        }
+        .image-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            flex-direction: row;
+            gap: 20px;
+        }
+        img {
+            max-width: 100%;
+            max-height: 100vh; /* Large images */
+            width: auto;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            object-fit: contain;
+            border: 1px solid #e5e7eb; /* Faint gray border */
+            border-radius: 4px;
+            opacity: 0;
+            animation: fadeInImage 0.5s ease forwards; /* Fade-in animation */
+        }
+        @keyframes fadeInImage {
+            to { opacity: 1; }
+        }
+        .loading {
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #3498db; /* Original blue */
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error-message {
+            color: #e74c3c;
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+            background-color: #f4f4f5; /* Light gray background */
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        footer {
+            margin-top: 40px;
+            padding: 24px 0; /* Slightly more padding */
+            border: none; /* Remove all borders */
+            border-top: 1px solid #ddd; /* Only top border */
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            font-size: 14px;
+            color: #666; /* Original gray text */
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.05); /* Subtle shadow */
+            margin-top: auto; /* Push footer to bottom */
+            background-color: #e5e7eb; /* Subtle cool gray background */
+            width: 100vw; /* Full viewport width */
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+        .footer-container {
+            max-width: 1400px; /* Match body max-width */
+            margin: 0 auto;
+            padding: 0 20px; /* Match body padding */
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+        .footer-left, .footer-right {
+            margin-bottom: 10px;
+        }
+        .footer-left {
+            flex: 2;
+            padding-right: 20px;
+        }
+        .footer-right {
+            flex: 1;
+            text-align: right;
+            font-weight: 500;
+        }
+        @media (max-width: 768px) {
+            footer {
+                flex-direction: column;
+            }
+            .footer-left, .footer-right {
+                text-align: center;
+                padding: 0;
+            }
+            .image-container {
+                flex-direction: column;
+            }
+            .image-box {
+                margin-bottom: 20px;
+            }
+            .footer-container {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Enhancement using Wavelet Transform & Interpolation</h1>
+    
+    <div class="upload-container">
+        <h2>Upload Image</h2>
+        <input type="file" id="imageInput" accept="image/*">
+        
+        <div class="options-container">
+            <div class="option-group">
+                <label for="claheOption">CLAHE Enhancement:</label>
+                <select id="claheOption">
+                    <option value="yes">With CLAHE</option>
+                    <option value="no">Without CLAHE</option>
+                </select>
+            </div>
+            
+            <div class="option-group">
+                <label for="thresholdOption">Threshold Type:</label>
+                <select id="thresholdOption">
+                    <option value="soft">Soft Threshold</option>
+                    <option value="hard">Hard Threshold</option>
+                </select>
+            </div>
+        </div>
+        
+        <button id="processBtn" disabled>Enhance Image</button>
+    </div>
+    
+    <div class="info-container" id="infoContainer">
+        <h2>About This Program</h2>
+        <p class="program-description">This application enhances image quality and detail using advanced wavelet transformation techniques and adaptive contrast improvement.</p>
+        <div class="info-boxes">
+            <div class="info-box">
+                <h3>Technologies Used</h3>
+                <ul>
+                    <li><strong>DWT (Discrete Wavelet Transform):</strong> Decomposes the image into different frequency components.</li>
+                    <li><strong>SWT (Stationary Wavelet Transform):</strong> Provides translation-invariant wavelet decomposition.</li>
+                    <li><strong>Cubic Spline Interpolation:</strong> High-quality image resizing preserving edges.</li>
+                </ul>
+            </div>
+            <div class="info-box">
+                <h3>Enhancement Techniques</h3>
+                <ul>
+                    <li><strong>Thresholding:</strong> Applies hard or soft thresholding to reduce noise while preserving features.</li>
+                    <li><strong>CLAHE:</strong> Enhances local contrast while preventing noise amplification.</li>
+                    <li><strong>Combined Approach:</strong> Uses wavelets with interpolation for optimal results.</li>
+                </ul>
+            </div>
+            <div class="info-box">
+                <h3>Implementation</h3>
+                <ul>
+                    <li><strong>Backend:</strong> Python with Flask web framework</li>
+                    <li><strong>Libraries:</strong> NumPy, OpenCV, PyWavelets, SciPy</li>
+                    <li><strong>Frontend:</strong> HTML, CSS, JavaScript</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="loading">
+        <div class="spinner"></div>
+        <p>Processing image, please wait...</p>
+    </div>
+    
+    <div class="error-message" id="errorMessage"></div>
+    
+    <div class="image-container" id="imageComparisonContainer" style="display: none;">
+        <div class="image-box" id="originalContainer">
+            <h3>Original Image</h3>
+            <img id="originalImage" src="" alt="Original Image">
+        </div>
+        
+        <div class="image-box" id="enhancedContainer">
+            <h3>Enhanced Image</h3>
+            <img id="enhancedImage" src="" alt="Enhanced Image">
+            <button class="download-btn" id="downloadBtn">Download Enhanced Image</button>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="footer-container">
+            <div class="footer-left">
+                <p>Developed by: Iman Ghorai, Mausam Kumar, Logeshwaran S<br>
+                Under the guidance of: Mrs. Shruthi T S (Assistant Professor)</p>
+            </div>
+            <div class="footer-right">
+                <p>K. S. Institute of Technology<br>
+                Department of Computer Science and Engineering</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        let imageData = null;
+        
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    imageData = event.target.result;
+                    document.getElementById('processBtn').disabled = false;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        document.getElementById('processBtn').addEventListener('click', function() {
+            if (!imageData) {
+                showError('Please select an image first.');
+                return;
+            }
+            
+            const claheOption = document.getElementById('claheOption').value;
+            const thresholdOption = document.getElementById('thresholdOption').value;
+            
+            document.getElementById('imageComparisonContainer').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            document.querySelector('.loading').style.display = 'block';
+            
+            // Hide the info container when processing starts
+            document.getElementById('infoContainer').style.display = 'none';
+            
+            fetch('/process', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    image: imageData,
+                    clahe: claheOption,
+                    threshold: thresholdOption
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('.loading').style.display = 'none';
+                
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+                
+                document.getElementById('originalImage').src = data.original;
+                document.getElementById('enhancedImage').src = data.enhanced;
+                
+                document.getElementById('imageComparisonContainer').style.display = 'flex';
+                
+                // Setup download button
+                document.getElementById('downloadBtn').onclick = function() {
+                    const link = document.createElement('a');
+                    link.href = data.enhanced;
+                    link.download = 'enhanced_image.png';
+                    link.click();
+                };
+            })
+            .catch(error => {
+                document.querySelector('.loading').style.display = 'none';
+                showError('An error occurred during processing. Please try again.');
+                console.error('Error:', error);
+            });
+        });
+        
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
