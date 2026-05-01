@@ -8,8 +8,6 @@ This project combines image processing with a simple web interface, allowing use
 
 ## Preview
 
-*(Add screenshots here)*
-
 ![Home](screenshots/home.png)
 ![Result](screenshots/result.png)
 
