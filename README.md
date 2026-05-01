@@ -1,6 +1,8 @@
 # Image Enhancement Tool
 
-This is a web-based application that improves image quality using wavelet transform techniques and contrast enhancement. It provides a simple interface where users can upload an image, process it, and compare the result instantly.
+A web-based image enhancement application that improves image quality using wavelet transform, interpolation, and adaptive contrast enhancement.
+
+The application allows users to upload images, process them using advanced techniques, and instantly compare the results.
 
 ---
 
