@@ -1,23 +1,45 @@
 # Image Enhancement Tool
 
-A web-based image enhancement application that improves image quality using wavelet transform, interpolation, and adaptive contrast enhancement.
+A web-based application that enhances image quality using wavelet transform, interpolation, and adaptive contrast techniques.
 
-The application allows users to upload images, process them using advanced techniques, and instantly compare the results.
-
----
-
-## What this project does
-
-- Upload an image from your system  
-- Enhance image using wavelet transform  
-- Reduce noise using thresholding (hard/soft)  
-- Optionally apply CLAHE for better contrast  
-- View original and enhanced images side by side  
-- Download the enhanced image  
+This project combines image processing with a simple web interface, allowing users to upload an image, apply enhancement methods, and instantly compare results.
 
 ---
 
-## Tech stack
+## Preview
+
+*(Add screenshots here)*
+
+![Home](screenshots/home.png)
+![Result](screenshots/result.png)
+
+---
+
+## Key Features
+
+- Upload and process images directly in the browser  
+- Wavelet-based image enhancement (DWT + SWT)  
+- Noise reduction using hard and soft thresholding  
+- Optional CLAHE for improved contrast  
+- Side-by-side comparison of original and enhanced images  
+- Download enhanced output  
+
+---
+
+## How it Works
+
+The enhancement pipeline applies multiple steps:
+
+- **Wavelet Transform** to break the image into frequency components  
+- **Thresholding** to reduce noise while preserving details  
+- **Interpolation** to improve resolution  
+- **CLAHE** (optional) to enhance local contrast  
+
+These techniques work together to produce a sharper and clearer image.
+
+---
+
+## Tech Stack
 
 - Python (Flask)
 - OpenCV
@@ -28,33 +50,33 @@ The application allows users to upload images, process them using advanced techn
 
 ---
 
-## How to run the project
+## Getting Started
 
-### 1. Clone the repository
+### Clone the repository
 
 ```
 git clone https://github.com/predator1312/Image-Enhancement-Tool.git
 ```
 
-### 2. Go to project folder
+### Navigate to the project folder
 
 ```
 cd Image-Enhancement-Tool
 ```
 
-### 3. Install dependencies
+### Install dependencies
 
 ```
 pip install -r requirements.txt
 ```
 
-### 4. Run the app
+### Run the application
 
 ```
 python app.py
 ```
 
-### 5. Open in browser
+### Open in browser
 
 ```
 http://127.0.0.1:5000
@@ -62,7 +84,7 @@ http://127.0.0.1:5000
 
 ---
 
-## Project structure
+## Project Structure
 
 ```
 Image-Enhancement-Tool/
@@ -71,18 +93,25 @@ Image-Enhancement-Tool/
 ├── requirements.txt
 ├── templates/
 │   └── index.html
+├── screenshots/
 ├── .gitignore
 └── README.md
 ```
 
 ---
 
-## Future improvements
+## Why this Project
 
-- Drag and drop image upload  
-- Faster processing  
-- Support for multiple images  
-- Deploy as an online tool  
+This project was built to apply image processing concepts in a practical setting. It demonstrates how wavelet transforms and contrast enhancement techniques can be integrated into a real-world application with a user-friendly interface.
+
+---
+
+## Future Improvements
+
+- Drag-and-drop image upload  
+- Faster processing pipeline  
+- Batch image processing  
+- Deployment as a live web application  
 
 ---
 
